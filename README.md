@@ -145,10 +145,21 @@ for(BasicBlock::iterator bbi = bb->begin(), bbie = bb->end();bbi!=bbie;bbi++)
 
 
 ## Conclusion
+- LLVM이라는 새로운 환경에서 Secure Coding Rule을 구현하여 보안 취약점을 보완하는 기능을 구현해보았습니다. LLVM은 다양한 Well-Defined language이기에 보다 다양한 Back-end에 적용할 수 있고, 따라서 Baremetal 환경의 보안 취약점에 효과적으로 대응할 수 있다고 예상할 수 있습니다.
+- 구현 중 'Use-after-Free'의 경우, 실질적인 operand 추출과 pointer 상태확인에 어려움을 겪어 끝까지 구현하지 못하였습니다.
+- 향후 구현하지 못했던 기능을 보완하고 현재 Native Linux 환경에서 확장하여 ARM 기반의 Baremetal 환경에 적용하는 것을 목표로 합니다.
 
 ## Reference
-
-
-
+- 강우석, 허기홍, "Infer를 이용한 보안 취약점 탐지용 정적 분석”,  한국정보과학회, 2021
+- 김동준, 한선우, 신기성, 송미희, 조진성, "IoT 디바이스 취약점 분석”,  한국컴퓨터종합학술대회, 2019
+- 박수현, 최종욱, "LLVM: 탑재소프트웨어 개발을 위한 차세대 컴파일러 기술", 항공우주산업기술동향
+- Difference between Bare Metal vs. Embedded Linux : https://miscircuitos.com/difference-between-bare-metal-vs-embedded-linux
+- 오크(ORK) – 난독화 컴파일러 도구 : https://engineering.linecorp.com/ko/blog/code-obfuscation-compiler-tool-ork-1
+- 박우진, 조진성, "Baremetal 펌웨어 보안 강화 기법", 2020년 한국소프트웨어종합학술대회 논문집
+- 박우진, 이한솔, 조진성, "LLVM 기반의 BareMetal IoT 디바이스 펌웨어 난독화", 2020년 한국컴퓨터종합학술대회 논문집
+- 행정안전부, 한국인터넷진흥원, "전자정부 SW 개발·운영자를 위한 소프트웨어 개발보안 가이드"
+- “LLVM Documentation”, https://llvm.org/doxygen/index.html
+- "llvm-nullptr", https://github.com/monokles/llvm-nullptr
+- "buffer-overflow-detector", https://github.com/endvroy/buffer-overflow-detector
 
 
