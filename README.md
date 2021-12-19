@@ -25,7 +25,7 @@ IoT device는 보안 기술 적용의 어려움으로 보안상 취약점이 많
 - Clang : https://clang.llvm.org/get_started.html
 
 ## Basic Usages
-- LLVM-Pass 작성 후 Pass 파일을 .so 파일을 만들기 위해서는, llvm이 build된 directory에서 make합니다.
+- LLVM-Pass 작성 후 Pass 파일을 .so 파일로 만들기 위해서는, llvm이 build된 directory에서 make합니다.
 ```
 cd /llvm-project/build
 make
@@ -34,14 +34,14 @@ make
 ```
 clang -O0 -S –emit-llvm sample.c –o sample.ll
 ```
-- .ll 파일을 pass를 통해 검증하는 것은 opt르 사용합니다.
+- .ll 파일을 pass를 통해 검증하는 것은 opt를 사용합니다.
 ```
 opt –load /llvm-project/build/lib/[your-pass].so –[your-pass-command] sample.ll
 ```
 
 ## Core Implementation Description
 ### 1.메모리 버퍼 오버플로우 구현
-- 잠재적으로 버퍼 오버플로우가 일어나 수 있는 값의 범위를 알려줍니다. 순서대로 context, 함수, 접근하는 line, 버퍼 사이즈, 접근 가능한 범위를 출력합니다.
+- 잠재적으로 버퍼 오버플로우가 일어날 수 있는 값의 범위를 알려줍니다. 순서대로 context, 함수, 접근하는 line, 버퍼 사이즈, 접근 가능한 범위를 출력합니다.
 - 테스트 하기 위한 코드와 출력결과는 다음과 같습니다.
 ```c
 int main(int argc, char **argv) {
@@ -145,7 +145,7 @@ for(BasicBlock::iterator bbi = bb->begin(), bbie = bb->end();bbi!=bbie;bbi++)
 
 
 ## Conclusion
-- LLVM이라는 새로운 환경에서 Secure Coding Rule을 구현하여 보안 취약점을 보완하는 기능을 구현해보았습니다. LLVM은 다양한 Well-Defined language이기에 보다 다양한 Back-end에 적용할 수 있고, 따라서 Baremetal 환경의 보안 취약점에 효과적으로 대응할 수 있다고 예상할 수 있습니다.
+- LLVM이라는 새로운 환경에서 Secure Coding Rule을 구현하여 보안 취약점을 보완하는 기능을 구현해보았습니다. LLVM은 Well-Defined language이기에 보다 다양한 Back-end에 적용할 수 있고, 따라서 Baremetal 환경의 보안 취약점에 효과적으로 대응할 수 있다고 예상할 수 있습니다.
 - 구현 중 'Use-after-Free'의 경우, 실질적인 operand 추출과 pointer 상태확인에 어려움을 겪어 끝까지 구현하지 못하였습니다.
 - 향후 구현하지 못했던 기능을 보완하고 현재 Native Linux 환경에서 확장하여 ARM 기반의 Baremetal 환경에 적용하는 것을 목표로 합니다.
 
