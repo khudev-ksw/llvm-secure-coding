@@ -127,8 +127,27 @@ if(isa<CallInst>(bbi))
 ```
 <img width="597" alt="output2" src="https://user-images.githubusercontent.com/41164017/146675115-cf426305-a0ae-4ba3-9b9c-9b1905c3f5f2.png">
 
+#### 3-3.기능 instruction의 operand 추출
+- (3-3)에서는 (3-2)에서 추출한 instruction의 operand를 추적하여 사용자가 정의한 pointer를 사용하고 있는지 확인합니다. 이를 위해 우선 instruction의 모든 operand를 추출합니다.
+- Pass의 core code와 출력결과는 다음과 같습니다.
+```c++
+for(BasicBlock::iterator bbi = bb->begin(), bbie = bb->end();bbi!=bbie;bbi++)
+{
+  errs() << *bbi << "\n";
+  // bbi의모든 operand 추출
+  for(Use &U :bbi->operands())
+  {
+    errs() << "   " << *(U.get()) << "\n";
+  }
+}
+```
+<img width="644" alt="output3" src="https://user-images.githubusercontent.com/41164017/146675187-21718fc0-fe81-43be-878d-c219682db69f.png">
 
-## Result & Future
+
+## Conclusion
+
+## Reference
+
 
 
 
