@@ -1,16 +1,10 @@
-# LLVM-Pass를 통한 Secure Coding Rule 검사
-Capstone Design 1 LLVM Project
-
+# Capstone Design 1 LLVM Project : LLVM-Pass로 Secure Coding Rule 준수 여부 검사
 ## Introduction
-LLVM-Pass를 이용하여 Secure Coding Rule을 고려한 코드를 삽입하여 취약점 보완
+IoT device는 보안 기술 적용의 어려움으로 보안상 취약점이 많습니다. 이를 해결하기 위해 많은 방법들 개발되고 있으며, 그 중 본 연구에서는 Linux 환경에서 LLVM-Pass를 통해 Secure Coding Rule을 검사하는 기능을 구현해보았습니다. 궁극적으로는 ARM 등 Baremetal System에 LLVM을 적용하여 Secure Coding Rule을 준수하는 code verification tool 제작을 목표로 합니다.
 
 ## Related Works
-- 정적분석
-- 퍼징
-- 기호실행
-- LLVM
-- LLVM IR
-- LLVM-Pass
+- 정적분석, 퍼징, 기호실행 등 취약점 탐지 방법
+- LLVM, LLVM IR, LLVM-Pass : https://llvm.org
 
 ## Target
 - 메모리 버퍼 오버플로우 : 메모리 공간 사이즈 제한, 문자열 끝에 Null 패딩
