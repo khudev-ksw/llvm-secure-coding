@@ -25,12 +25,12 @@ IoT device는 보안 기술 적용의 어려움으로 보안상 취약점이 많
 - Clang : https://clang.llvm.org/get_started.html
 
 ## Basic Usages
-- LLVM-Pass 작성 후 Pass 파일이 .so 파일을 만들기 위해서는, llvm이 build된 directory에서 make합니다.
+- LLVM-Pass 작성 후 Pass 파일을 .so 파일을 만들기 위해서는, llvm이 build된 directory에서 make합니다.
 ```
 cd /llvm-project/build
 make
 ```
-- c code를 llvm 코드로 변환하는 것은 clang을 사용합니다.
+- 검사할 c code를 LLVM-IR(.ll)로 변환하는 것은 clang을 사용합니다.
 ```
 clang -O0 -S –emit-llvm sample.c –o sample.ll
 ```
@@ -38,6 +38,21 @@ clang -O0 -S –emit-llvm sample.c –o sample.ll
 ```
 opt –load /llvm-project/build/lib/[your-pass].so –[your-pass-command] sample.ll
 ```
+
+## Core Implementation Description
+### 1.메모리 버퍼 오버플로우 구현
+- 잠재적으로 버퍼 오버플로우가 일어나 수 있는 값의 범위를 알려줍니다. 순서대로 context, 함수, 접근하는 line, 버퍼 사이즈, 접근 가능한 범위를 출력합니다.
+- 테스트 하기 위한 코드와 출력결과는 다음과 같습니다.
+```c
+int main(int argc, char **argv) {
+  unsigned buffer[4] = {0,0,0,0};
+  return buffer[5];
+}
+```
+```
+, main, 5, 16, 20:20
+```
+
 
 
 ## Result & Future
