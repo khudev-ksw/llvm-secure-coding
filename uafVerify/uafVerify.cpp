@@ -20,27 +20,21 @@ namespace {
 	for(Function::iterator bb = F.begin(), e = F.end(); bb!=e; bb++)
 	{
 		for(BasicBlock::iterator bbi = bb->begin(), bbie = bb->end();bbi!=bbie;bbi++){
-		// errs() << &(*bbi) << "\n";
 		if(isa<CallInst>(bbi))
 	 	{
-			//errs() << &(*bbi) << "\n";
                         CallInst *tempi = cast<CallInst>(bbi);
                         // check function of bbi is a free or not
                         StringRef callName = tempi->getCalledFunction()->getName();
 			if(callName=="free")
                         {
                                 errs() << "     Detected function :" << callName << "\n";
-                                //errs() << "Instruction address(bbi) :" << &(*bbi)  << "\n";
                                 errs() << "     Instruction value :" << *tempi << "\n";
                                 
                                 //retreive operands of free
                                 for(Use &U :tempi->operands())
                                 {
-                                        //errs() << "     Is it a free function declaration?: ";
-                                        //if((U.get())->getName()=="free") errs() << "Yes\n";
 					if((U.get())->getName()!="free")
 					{
-						//errs() << "No\n";
 						Instruction* freeedOp = cast<Instruction>(U.get());
 	                                        errs() << "     free-ed operands :" << *(freeedOp) << "\n";
 						// call @free -> fist operand -> bitcast -> first operand -> select operand(original ptr)
@@ -51,11 +45,7 @@ namespace {
 						freeedMap[originPtr] = true;
 
 					}
-                                        //errs() << "tempi function :" << ((U.get())->getName()) << "\n";
-                                        //check the operands is a ptr or not
-                                        //errs() << "type of operands :" << *((U.get())->getType()) << "\n";
-                                        //if(isa<PointerType>((U.get())->getType())) errs() << "Is A ptr\n\n";
-                                        //else errs() << "Not a ptr\n\n";
+
                                 }
                         }
 	 	}
@@ -85,23 +75,17 @@ namespace {
                 {
                         if(isa<CallInst>(bbi))
 			{
-				//CallInst* callbbi = cast<CallInst>(bbi);
 				for(Use &U :bbi->operands())
 				{
-					//errs() << "U.get() : " << U.get()->getName() << "\n";
-					//Instruction* bbiop = cast<Instruction>(U.get());
+
 					if(U.get()->getName()!="free" && U.get()->getName()!="malloc" && U.get()->getName()!="")
 					{
-						//errs() << U.get()->getName() << "\n";
-						//errs() << *bbi << "\n";
+
 						userDefCallInsts.insert(&(*bbi));
 					}
 				}
 			}
-                        /*for(Use &U :bbi->operands())
-                        {
-                                errs() << "   " << *(U.get()) << "\n";
-                        }*/
+
                 }
         }
     }
@@ -118,9 +102,9 @@ namespace {
         mi++;
       }
 
-      // printEveryInstOp(F);
-      // printUserDefCallInst(F);
-      // for(auto S :userDefCallInsts) errs() << *S << " ::: " << &(*S) << "\n";
+      printEveryInstOp(F);
+      printUserDefCallInst(F);
+      for(auto S :userDefCallInsts) errs() << *S << " ::: " << &(*S) << "\n";
       freeedMap.clear();
 
     }
