@@ -56,7 +56,6 @@ int main(int argc, char **argv) {
 ### 2.Null Pointer 역참조 구현
 - Null Pointer 역참조에서는 먼저 코드 상 모든 포인터 값을 추출해 벡터에 저장하여 저장된 값을 출력합니다.
 - 그리고 저장된 값이 Null Pointer인지 검증하며, 맞다면 에러를 출력합니다. Pass의 core code와 출력결과는 다음과 같습니다.
-- 테스트 하기 위한 코드와 출력결과는 다음과 같습니다.
 ```c++
 virtual bool runOnFunction(Function &F){
   ptrValues.clear();
@@ -76,9 +75,41 @@ virtual bool runOnFunction(Function &F){
   - (2) call instruction 중 free, malloc이 아닌 실질적인 기능 instruction의 추출
   - (3) 기능 instruction의 operand 추출
   - (4) 기능 instruction이 사용하는 operand의 pointer 상태 확인
-
+#### 3-1.free( ) 된 pointer를 포함하는 instruction의 추출
+- call instruction 중 @free를 포함한 instruction을 추출합니다. 그리고 해당 instruction에서 실질적으로 free하는 pointer, 즉 @free의 실질적인 operand를 추출합니다. 이는 실제로 free가 된 pointer를 찾아서 추적하기 위함입니다.
+- Pass의 core code와 출력결과는 다음과 같습니다.
+```c++
+if(isa<CallInst>(bbi))
+{
+  CallInst *tempi = cast<CallInst>(bbi);
+  // bbi의 function이 free인지 확인
+  StringRef callName = tempi->getCalledFunction()->getName();
+  if(callName=="free")
+  {
+    errs() << "     Detected function :" << callName << "\n";
+    errs() << "     Instruction value :" << *tempi << "\n";
+    //free의 operand 추출
+    for(Use &U :tempi->operands())
+    {
+      // free의 operand 중 free 함수가 아닌 실질적인 pointer 추출
+      if((U.get())->getName()!="free")
+      {
+        Instruction* freeedOp = cast<Instruction>(U.get());
+        errs() << "     free-ed operands :" << *(freeedOp) << "\n";
+        Instruction* preorigin = cast<Instruction>(freeedOp->getOperand(0));
+        errs() << "     pre-origin : " << *(preorigin) << "\n";
+        Instruction* originPtr = cast<Instruction>(preorigin->getOperand(0));
+        errs() << "     origin : " << *(originPtr) << "\n\n";
+        freeedMap[originPtr] = true;
+      }
+    }
+  }
+}
+```
+<img width="638" alt="output1" src="https://user-images.githubusercontent.com/41164017/146674995-835aedc1-75e3-41e3-8e33-3e9cdb0ceaff.png">
 
 
 ## Result & Future
+
 
 
