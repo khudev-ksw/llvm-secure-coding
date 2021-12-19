@@ -108,8 +108,28 @@ if(isa<CallInst>(bbi))
 ```
 <img width="638" alt="output1" src="https://user-images.githubusercontent.com/41164017/146674995-835aedc1-75e3-41e3-8e33-3e9cdb0ceaff.png">
 
+#### 3-2.call instruction 중 free, malloc이 아닌 실질적인 기능 instruction의 추출
+- (3-1)에서는 free된 pointer를 찾았다면 (3-2)에서는 실제로 이 pointer를 사용하는 기능 instruction을 찾아야 합니다. 기능 instruction을 찾아야 해당 instruction이 사용하는 pointer를 추적하고 그 pointer가 free되었는지 malloc 되었는지 확인할 수 있기 때문입니다.
+- Pass의 core code와 출력결과는 다음과 같습니다.
+```c++
+if(isa<CallInst>(bbi))
+{
+  for(Use &U :bbi->operands())
+  {
+    // call insturction 중 free, malloc, 공백이 아닌 function 추출
+    if(U.get()->getName()!="free" && U.get()->getName()!="malloc" && U.get()->getName()!="")
+    {
+      // 추출한 instruction은 향후 검증을 위해 변수에 저장
+      userDefCallInsts.insert(&(*bbi));
+    }
+  }
+}
+```
+<img width="597" alt="output2" src="https://user-images.githubusercontent.com/41164017/146675115-cf426305-a0ae-4ba3-9b9c-9b1905c3f5f2.png">
+
 
 ## Result & Future
+
 
 
 
