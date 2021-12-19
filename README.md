@@ -19,7 +19,26 @@ IoT device는 보안 기술 적용의 어려움으로 보안상 취약점이 많
   - https://github.com/endvroy/buffer-overflow-detector
 - 'Use-after-Free'의 경우 직접적인 샘플코드가 없어 기본적인 알고리즘을 참고로 직접구현을 시도하였습니다.
 
+## Prerequisite
+- 기능 구현과 실행에는 LLVM과 Clang이 필요합니다. LLVM 초기빌드는 빌드환경에 따라 매우 많은 시간을 필요로 할 수 있습니다.
+- LLVM : https://llvm.org/docs/GettingStarted.html
+- Clang : https://clang.llvm.org/get_started.html
+
+## Basic Usages
+- LLVM-Pass 작성 후 Pass 파일이 .so 파일을 만들기 위해서는, llvm이 build된 directory에서 make합니다.
+```
+cd /llvm-project/build
+make
+```
+- c code를 llvm 코드로 변환하는 것은 clang을 사용합니다.
+```
+clang -O0 -S –emit-llvm sample.c –o sample.ll
+```
+- .ll 파일을 pass를 통해 검증하는 것은 opt르 사용합니다.
+```
+opt –load /llvm-project/build/lib/[your-pass].so –[your-pass-command] sample.ll
+```
 
 
-## Implementation Environment
-- Ubuntu 기반 Linux -> Arduino 등 Embedded Board
+## Result & Future
+
